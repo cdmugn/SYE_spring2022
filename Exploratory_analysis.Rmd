@@ -1,0 +1,26 @@
+---
+title: "Exploratory_analysis"
+author: "Clara Mugnai"
+date: "11/4/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+library(dplyr)
+turnout_data <- read_excel("SYE data sheet.xlsx",
+ col_types = c(
+ ))
+turnout_data %>% group_by(Horse) %>% summarise(mean(Overall))
+turnout_data %>% group_by(Personality) %>% summarise(mean(Overall))
+ggplot(data = turnout_data, mapping = aes(x = Personality, y = Overall)) +
+  geom_point()
+
+```
+
