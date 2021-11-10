@@ -20,7 +20,22 @@ turnout_data <- read_excel("SYE data sheet.xlsx",
 turnout_data %>% group_by(Horse) %>% summarise(mean(Overall))
 turnout_data %>% group_by(Personality) %>% summarise(mean(Overall))
 ggplot(data = turnout_data, mapping = aes(x = Personality, y = Overall)) +
-  geom_point()
+  geom_boxplot()
+#interesting but have to watch how many in each group there are
+ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Overall)) + geom_boxplot()
+# chaotic
+ggplot(data = turnout_data, mapping = aes(x = Age, y = Overall)) + geom_point() + geom_smooth(se = FALSE)
+#possibly significant
+ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Overall)) + geom_point() + geom_smooth(se = FALSE)
+# Why am I not getting a smoother for this plot?
+
+ggplot(data = turnout_data, mapping = aes(x = Flymask, y = Overall)) + geom_boxplot()
+#possibly significant
+ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Overall)) + geom_boxplot()
+# not important
+
+ggplot(data = turnout_data, mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) + geom_boxplot()
+# interesting but need to consider other causes for the trends.
 
 ```
 
