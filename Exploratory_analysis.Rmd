@@ -14,9 +14,33 @@ library(tidyverse)
 library(ggplot2)
 library(readxl)
 library(dplyr)
+library(lme4)
 turnout_data <- read_excel("SYE data sheet.xlsx",
  col_types = c(
  ))
+```
+Data summary:
+  "Horse" - Horse name
+  "Time_observed(minutes)" - Time horse was observed
+  "Time_of_day" - Window of time horse was observed
+  "Age" - Age of horse
+  "Personality" - Personality type of specific horse
+  "Date" - Date horse was observed
+  "Flymask" - Whether or not horse was wearing a flymask
+  "Flysheet" - Whether or not horse was wearing a flysheet
+  "Group" - Whether or not horse was in a group
+  "Type_of_turnout" - Which turnout field the horse was in for the time observed
+  "Frequency_of_tail_swishes" - how often the horse swished its tail during turnout
+  "Minutes_grazing" - How many minutes of turnout the horse spent grazing
+  "Dialated_nostrils" - How many times the horse dialated its nostrils during turnout
+  "Rigid_body_posture" - How many times the horse made its body rigid during turnout
+  "minutes_spent_pacing" - Haw many minutes of turnout the horse spent pacing or stressed 
+  "number_whinnies" - How many times the horse whinnied in turnout
+  "number_positive_interactions_w/friends" - How many positive interactions the horse experienced with other horses
+  "number_negative_interactions_w/friends" - How many negative interactions the horse experienced with other horses
+  "time_layingdown" - Minutes the horse spent laying down
+
+```{r}
 turnout_data %>% group_by(Horse) %>% summarise(mean(Overall))
 turnout_data %>% group_by(Personality) %>% summarise(mean(Overall))
 ggplot(data = turnout_data, mapping = aes(x = Personality, y = Overall)) +
@@ -37,5 +61,40 @@ ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Overall)) + geom_box
 ggplot(data = turnout_data, mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) + geom_boxplot()
 # interesting but need to consider other causes for the trends.
 
+ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Overall)) + 
+  geom_point() + 
+  geom_smooth(method="lm") +
+  facet_wrap("Horse")
+
+ggplot(data=turnout_data,aes(x=Age,y=Overall,color=Group)) + 
+  geom_point() + 
+  geom_smooth(method="lm")
+
+ggplot(data=turnout_data,aes(x=Age,y=Overall,color=Flymask)) + 
+  geom_point() + 
+  geom_smooth(method="lm")
+
+ggplot(turnout_data, aes(x=Personality,y=Overall)) + 
+  geom_boxplot(fill="steelblue")
+
+ggplot(data=turnout_data,aes(x=Age,y=Overall,color=Personality)) + 
+  geom_point() + 
+  geom_smooth(method="lm")
 ```
 
+- Exploring multilevel scenarios, it looks like Age and Group may be related, with different slopes for group and non-group, so as age increases in a group the group does better but as age increases in individual horses they do worse. 
+
+- Flymask also seems to have significant differences in slopes and intercepts. 
+
+
+- The different personalities definitely are different, and we have seen that each horse is different so we do need to account for the grouped horses. 
+
+- the personalities seem to make a difference in the slopes here but we have to be mindful of the fact that there are very few of each personality. 
+
+
+Unconditional means model:
+```{r}
+unmeanmod = lmer(Overall ~ 1 + (1|Horse), data = turnout_data, REML = T)
+summary(unmeanmod)
+```
+- looking at the unconditional means model, the ICC value is (147.1/(103.2+147.1) = 0.59, so this is a multilevel data set and needs to be allowed to have different intercepts and slopes for different horses. 
