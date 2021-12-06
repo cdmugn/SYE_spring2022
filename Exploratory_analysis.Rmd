@@ -41,45 +41,46 @@ Data summary:
   "time_layingdown" - Minutes the horse spent laying down
 
 ```{r}
-turnout_data %>% group_by(Horse) %>% summarise(mean(Overall))
-turnout_data %>% group_by(Personality) %>% summarise(mean(Overall))
-ggplot(data = turnout_data, mapping = aes(x = Personality, y = Overall)) +
+#Using total negative signs instead of Overall because that is not as biased towards horses with turnout where there are grass.
+turnout_data %>% group_by(Horse) %>% summarise(mean(Totalnegativesigns))
+turnout_data %>% group_by(Personality) %>% summarise(mean(Totalnegativesigns))
+ggplot(data = turnout_data, mapping = aes(x = Personality, y = Totalnegativesigns)) +
   geom_boxplot()
 #interesting but have to watch how many in each group there are
-ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Overall)) + geom_boxplot()
+ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_boxplot()
 # chaotic
-ggplot(data = turnout_data, mapping = aes(x = Age, y = Overall)) + geom_point() + geom_smooth(se = FALSE)
+ggplot(data = turnout_data, mapping = aes(x = Age, y = Totalnegativesigns)) + geom_point() + geom_smooth(se = FALSE)
 #possibly significant
-ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Overall)) + geom_point() + geom_smooth(se = FALSE)
+ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_point() + geom_smooth(se = FALSE)
 # Why am I not getting a smoother for this plot?
 
-ggplot(data = turnout_data, mapping = aes(x = Flymask, y = Overall)) + geom_boxplot()
+ggplot(data = turnout_data, mapping = aes(x = Flymask, y = Totalnegativesigns)) + geom_boxplot()
 #possibly significant
-ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Overall)) + geom_boxplot()
+ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Totalnegativesigns)) + geom_boxplot()
 # not important
 
 ggplot(data = turnout_data, mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) + geom_boxplot()
 # interesting but need to consider other causes for the trends.
 
-ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Overall)) + 
+ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
   geom_point() + 
   geom_smooth(method="lm") +
   facet_wrap("Horse")
 
-ggplot(data=turnout_data,aes(x=Age,y=Overall,color=Group)) + 
+ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Group)) + 
   geom_point() + 
   geom_smooth(method="lm")
 
-ggplot(data=turnout_data,aes(x=Age,y=Overall,color=Flymask)) + 
+ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Flymask)) + 
   geom_point() + 
   geom_smooth(method="lm")
 
-ggplot(turnout_data, aes(x=Personality,y=Overall)) + 
+ggplot(turnout_data, aes(x=Personality,y=Totalnegativesigns)) + 
   geom_boxplot(fill="steelblue")
 
-ggplot(data=turnout_data,aes(x=Age,y=Overall,color=Personality)) + 
+ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Personality)) + 
   geom_point() + 
-  geom_smooth(method="lm")
+  geom_smooth(method="lm") 
 ```
 
 - Exploring multilevel scenarios, it looks like Age and Group may be related, with different slopes for group and non-group, so as age increases in a group the group does better but as age increases in individual horses they do worse. 
@@ -94,7 +95,7 @@ ggplot(data=turnout_data,aes(x=Age,y=Overall,color=Personality)) +
 
 Unconditional means model:
 ```{r}
-unmeanmod = lmer(Overall ~ 1 + (1|Horse), data = turnout_data, REML = T)
+unmeanmod = lmer(Totalnegativesigns ~ 1 + (1|Horse), data = turnout_data, REML = T)
 summary(unmeanmod)
 ```
-- looking at the unconditional means model, the ICC value is (147.1/(103.2+147.1) = 0.59, so this is a multilevel data set and needs to be allowed to have different intercepts and slopes for different horses. 
+- looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) = 0.68, so this is a multilevel data set and needs to be allowed to have different intercepts and "slopes" for different horses. 
