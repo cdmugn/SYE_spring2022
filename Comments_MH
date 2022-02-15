@@ -1,3 +1,15 @@
+Comments February 15: One thing that we can tackle before we start using shiny (which we will start in Data Viz next week) is adding a short introduction section. The
+literature review you pushed is a great start to this: you can use many of these sources in your introduction. You might also look at the references from those sources and see
+if any of them would be worthwhile reading.
+
+In addition to general background from those sources, the introduction can also describe your broad motivation and goals for the project. The final paragraph of it should then
+give a quick preview of the rest of the write-up. You might save this final paragraph for when the write-up is actually complete (it may be easire to describe what the reader
+should expect __after__ you already write the methods, results, and discussion.
+
+Nice work!
+
+
+
 Comments for Dec. 2 Meeting:
 
 Lines 5-6: "The intervals they were observed were randomized as much as possible:" need a little more detail here. Also, how did you select which horses to observe on a particular day?
