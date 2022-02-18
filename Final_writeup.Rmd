@@ -1,0 +1,72 @@
+---
+title: "Equine Turnout at St. Lawrence University"
+subtitle: "Clara Mugnai"
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,message=FALSE, warning=FALSE)
+```
+
+# Introduction:
+
+
+This project is an exploration of turnout preferences for horses both in the St. Lawrence University riding program, and boarding at the school’s barn. The facility all of the horses were located at and all of the data was gathered at is the Elsa Gunnison Appleton Riding Hall, in Canton, NY. The horses were turned out in rotations based on where they had previously done well outside. They were then observed in 30-minute intervals and various behaviors were recorded.
+
+Some variables of interest in the study were:
+
+- Time_of_day - the time of day when that observation was recorded
+-	Age - the age of the particular horse being observed
+- Personality - based on the four major personalities of horses, this is the personality type of that particular horse
+-	Date - the date which the observation was taken
+- Flymask - a 1 if the horse wore a fly mask that day, a 0 if they did not
+-	Flysheet - a 1 if the horse wore a fly sheet that day, a 0 if they did not
+-	Group - a 1 if the horse was in a group (2+), a 0 if they were not
+- Type_of_turnout - The name of the space the horse was turned out in (Image 1)
+-	Frequency_of_trail_swishes - how often the horse swished its tail in turnout (frequent, often, infrequent, or rare)
+-	Minutes_grazing - how many minutes of the 30 observed that the horse spent grazing 
+-	Dialated_nostrils - how many times the horse exhibited dialated nostrils in turnout
+-	Rigid_body_posture - how many times the horse exhibited a rigid, tense body posture
+-	minutes_spent_pacing - how many minutes of the 30 observed that the horse spent pacing 
+-	number_whinnies - how many times the horse whinnied in the 30 minutes observed 
+-	number_positive_interactions_w/friends - refer to Methods
+-	number_negative_interactions_w/friends - refer to Methods
+-	time_layingdown - minutes spent of the 30 observed, with the horse laying down
+
+# Methods 
+
+Methods:
+Site Map: Elsa Gunnison Appleton Riding Hall
+
+![Image 1: layout of turnout spaces at St. Lawrence Universities, Elsa Gunnison Appleton Riding Hall](/Users/claramugnai/Desktop/Spring 2022/SYE/SYE_spring2022/turnoutmap.png)
+
+Horses were observed for 30-minute intervals in their natural turnout environments and groups. The intervals in which they were observed were randomized as much as possible, as well as the locations they were in. My personal class schedule and the weather dictated which days and times worked to observe in, and I attempted to rotate through the fields the same way the entire time I took observations. I started in the white rings and moved in a clockwise direction around the fields (white rings, round-pens, medicals, hunt field, boys 3, boys 2,etc).  The horses take turns going out, at the discretion of the barn manager, and that is not a set schedule so the ones being observed changed each week. 
+	
+
+It is important to note that the turnout location of a medical has no grass for them to graze on, only hay put there by humans, so those observations are outliers in that regard. During observation time it was noted how many minutes were spent both grazing (a positive behavior) and pacing (a negative behavior), while acknowledging that they could be doing neither of those things. In addition to that, the number of times they whinnied, dilated their nostrils, or had a rigid body posture were noted as negative signs in turnout. For horses both alone and with friends in turnout it was noted how many positive or negative social interactions they had with each other. Positive interactions were things like nuzzling or grooming and negative were running, chasing, or causing one another distress. Horses in solitary turnout could still be bothered or settled down by neighboring horses so they could have positive or negative interactions, as well. Finally, it was noted how often the horses were swishing their tails with the following scale:  
+
+- Frequent – almost constant – score 4 negative
+- Often – regularly – score 2 negative
+- Infrequent – some but not overly obvious – score 2 positive
+- Rare – hardly ever – score 4 positive
+
+
+Note: The scale used for finding these numbers was arbitrary, and chosen for the fact that it made sense given the importance of tail swishing compared to the overall turnout scores for each horse. The total number of tail swishes per horse, per observation session, were not possible to be observed so this scale was chosen instead. 
+
+Upon the completion of data collection overall turnout scores were calculated. This was done by adding; the minutes grazing, tail swishing score (if positive) , positive friend interactions, and minutes laying down together to be a positive score. Negative scores were; the sum of minutes pacing, tail swishing score (if negative), occurrences of body tension, whinnying, nostril dilation, and negative friend interactions (Foster). Choosing to add these numbers together was a subjective decision because every observation was 30 minutes long and all of the things that indicated a pleasant time for the horse were considered positive, all of the unpleasant things were considered negative (Paddock Anxiety). The positive and negative scores were then added together to give an overall turnout score. 
+	
+	
+For any horses that appeared 3 or more times in the data set, their observations were kept and are included in the final data set. Those horses were each then observed for approximately 10 minutes in the barn to quickly assess their personality types. In those 10 minutes they were exposed to new stimuli in the form of a human, another horse, and a foreign object to see how they reacted. Based on those reactions they were classified as either social, aloof, challenging, or fearful. For each type there was both a passive or aggressive form, depending on how fast or intense the reactions to the stimuli were (Barteau). 
+	
+	
+
+Sources: 
+Barteau, Y. (2009, March 5). Understanding horse personalities, part 1: The 4 basic personality 	types. Dressage Today. Retrieved December 9, 2021, from 	https://dressagetoday.com/theory/horse-personalities-basic-types. 
+Chaya, L., Cowan, E., & McGuire, B. (2006). A note on the relationship between time spent in 	turnout and behavior during turnout in horses (Equus caballus). Applied Animal 	Behavior Science, 98(1-2), 155–160. https://doi.org/10.1016/j.applanim.2005.08.020 
+Foster, R. (2019, October 1). Recognizing pain in stoic horses. The Horse. Retrieved December 9, 	2021, from https://thehorse.com/113343/recognizing-pain-in-stoic-horses/.
+Paddock anxiety: How to help your horse relax. TRTmethod. (2020, October 12). Retrieved 	December 9, 2021, from https://www.trtmethod.com/separation-anxiety/how-to-deal-	with-paddock-anxiety/. 
+
+
