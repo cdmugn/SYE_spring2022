@@ -83,29 +83,57 @@ turnout_data <- read_excel("SYE data sheet.xlsx",
  ))
 ```
 
+Using total negative signs instead of Overall because that is not as biased towards horses with turnout where there are grass.
 
 ```{r}
-#Using total negative signs instead of Overall because that is not as biased towards horses with turnout where there are grass.
 turnout_data %>% group_by(Horse) %>% summarise(mean(Totalnegativesigns))
 turnout_data %>% group_by(Personality) %>% summarise(mean(Totalnegativesigns))
 ggplot(data = turnout_data, mapping = aes(x = Personality, y = Totalnegativesigns)) +
   geom_boxplot()
-#interesting but have to watch how many in each group there are
+```
+
+Interesting things happening but have to watch how many observations per group
+
+
+```{r}
 ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_boxplot()
-# chaotic
+```
+
+This is really chaotic and hard to interpret, with no clear trends.
+
+```{r}
 ggplot(data = turnout_data, mapping = aes(x = Age, y = Totalnegativesigns)) + geom_point() + geom_smooth(se = FALSE)
-#possibly significant
+```
+
+A slight negative trend here but it is hard to interpret as there are very few observations on the left side of the plot.
+
+```{r}
 ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_point() + geom_smooth(se = FALSE)
-# Why am I not getting a smoother for this plot?
+```
 
+Why am I not getting a smoother for this plot?
+
+
+```{r}
 ggplot(data = turnout_data, mapping = aes(x = Flymask, y = Totalnegativesigns)) + geom_boxplot()
-#possibly significant
+```
+
+This is interesting but the biggest takeaway from this plot is that there are two outliers in the "no flymask category"
+
+```{r}
 ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Totalnegativesigns)) + geom_boxplot()
-# not important
+```
 
+There is not a large difference here, again the outliers are the most significant things in this plot. 
+
+```{r}
 ggplot(data = turnout_data, mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) + geom_boxplot()
-# interesting but need to consider other causes for the trends.
+```
 
+It looks like certain fields have more success but it also needs to be considered which horses go in those fields. 
+
+
+```{r}
 ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
   geom_point() + 
   geom_smooth(method="lm") +
@@ -114,27 +142,37 @@ ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Totalnegativesigns)) +
 ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Group)) + 
   geom_point() + 
   geom_smooth(method="lm")
+```
 
+Exploring multilevel scenarios, it looks like Age and Group may be related, with different slopes for group and non-group, so as age increases in a group the group does better but as age increases in individual horses they do worse.
+
+<Br>
+
+```{r}
 ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Flymask)) + 
   geom_point() + 
   geom_smooth(method="lm")
+```
 
+Flymask also seems to have significant differences in slopes and intercepts.
+
+<Br>
+
+```{r}
 ggplot(turnout_data, aes(x=Personality,y=Totalnegativesigns)) + 
   geom_boxplot(fill="steelblue")
+```
 
+The different personalities definitely are different, and we have seen that each horse is different so we do need to account for the grouped horses. the personalities seem to make a difference in the slopes here but we have to be mindful of the fact that there are very few of each personalities. 
+
+<Br>
+
+```{r}
 ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Personality)) + 
   geom_point() + 
   geom_smooth(method="lm") 
 ```
 
-- Exploring multilevel scenarios, it looks like Age and Group may be related, with different slopes for group and non-group, so as age increases in a group the group does better but as age increases in individual horses they do worse. 
-
-- Flymask also seems to have significant differences in slopes and intercepts. 
-
-
-- The different personalities definitely are different, and we have seen that each horse is different so we do need to account for the grouped horses. 
-
-- the personalities seem to make a difference in the slopes here but we have to be mindful of the fact that there are very few of each personality. 
 
 
 Unconditional means model:
@@ -142,15 +180,31 @@ Unconditional means model:
 unmeanmod = lmer(Totalnegativesigns ~ 1 + (1|Horse), data = turnout_data, REML = T)
 summary(unmeanmod)
 ```
-- looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) = 0.68, so this is a multilevel data set and needs to be allowed to have different intercepts and "slopes" for different horses. 
+
+Looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) = 0.68, so this is a multilevel data set and needs to be allowed to have different intercepts and "slopes" for different horses. 
+
+
+
+** Notes to self:
+
+Figure out smoother - line 110
+
+Clean up boxplots and all graphs 
+
+Put tables into pander so they are neater 
+
 
 
 
 
 # Citations
-Barteau, Y. (2009, March 5). Understanding horse personalities, part 1: The 4 basic personality 	types. Dressage Today. Retrieved December 9, 2021, from 	https://dressagetoday.com/theory/horse-personalities-basic-types. 
-Chaya, L., Cowan, E., & McGuire, B. (2006). A note on the relationship between time spent in 	turnout and behavior during turnout in horses (Equus caballus). Applied Animal 	Behavior Science, 98(1-2), 155–160. https://doi.org/10.1016/j.applanim.2005.08.020 
-Foster, R. (2019, October 1). Recognizing pain in stoic horses. The Horse. Retrieved December 9, 	2021, from https://thehorse.com/113343/recognizing-pain-in-stoic-horses/.
-Paddock anxiety: How to help your horse relax. TRTmethod. (2020, October 12). Retrieved 	December 9, 2021, from https://www.trtmethod.com/separation-anxiety/how-to-deal-	with-paddock-anxiety/. 
+
+  Barteau, Y. (2009, March 5). Understanding horse personalities, part 1: The 4 basic personality 	types. Dressage Today. Retrieved December 9, 2021, from 	https://dressagetoday.com/theory/horse-personalities-basic-types. 
+
+  Chaya, L., Cowan, E., & McGuire, B. (2006). A note on the relationship between time spent in 	turnout and behavior during turnout in horses (Equus caballus). Applied Animal 	Behavior Science, 98(1-2), 155–160.             https://doi.org/10.1016/j.applanim.2005.08.020 
+
+  Foster, R. (2019, October 1). Recognizing pain in stoic horses. The Horse. Retrieved December 9, 	2021, from  https://thehorse.com/113343/recognizing-pain-in-stoic-horses/.
+
+  Paddock anxiety: How to help your horse relax. TRTmethod. (2020, October 12). Retrieved 	December 9, 2021, from     https://www.trtmethod.com/separation-anxiety/how-to-deal-	with-paddock-anxiety/. 
 
 
