@@ -220,6 +220,8 @@ Looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) 
 
 ** Notes to self:
 
+Need to make everything ordered so the plots make sense
+
 Figure out smoother - line 110!!
 
 Line 168/179/201 - how to make the two trend lines custom colors so they match the scheme.
