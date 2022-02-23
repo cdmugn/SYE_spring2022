@@ -78,99 +78,131 @@ library(ggplot2)
 library(readxl)
 library(dplyr)
 library(lme4)
+library(knitr)
+library(pander)
+library(ggthemes)
 turnout_data <- read_excel("SYE data sheet.xlsx",
  col_types = c(
  ))
+
+turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes","No")) %>% 
+  mutate(Flysheet = if_else(Flysheet == "x", "Yes", "No")) %>%
+  mutate(Group = if_else(Group == "x", "Yes", "No")) %>%
+  replace(is.na(.), "No")
 ```
 
 Using total negative signs instead of Overall because that is not as biased towards horses with turnout where there are grass.
 
-```{r}
+```{r, echo=FALSE}
 turnout_data %>% group_by(Horse) %>% summarise(mean(Totalnegativesigns))
 turnout_data %>% group_by(Personality) %>% summarise(mean(Totalnegativesigns))
 ggplot(data = turnout_data, mapping = aes(x = Personality, y = Totalnegativesigns)) +
-  geom_boxplot()
+  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Horse Personality Types vs. Total Negative Signs", y = "Total Negative Signs", x = "Personality Type")
 ```
 
 Interesting things happening but have to watch how many observations per group
 
 
-```{r}
-ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_boxplot()
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Time of Day vs. Total Negative Signs", y = "Total Negative Signs", x = "Time of Day")
 ```
+
 
 This is really chaotic and hard to interpret, with no clear trends.
-
-```{r}
-ggplot(data = turnout_data, mapping = aes(x = Age, y = Totalnegativesigns)) + geom_point() + geom_smooth(se = FALSE)
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Age, y = Totalnegativesigns)) + geom_point(color = "purple4") + geom_smooth(se = FALSE, color = "mediumpurple1") +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
+
 
 A slight negative trend here but it is hard to interpret as there are very few observations on the left side of the plot.
 
-```{r}
-ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_point() + geom_smooth(se = FALSE)
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_point(color = "purple4") + geom_smooth(se = FALSE, color = "mediumpurple1") +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Time of Day vs. Total Negative Signs", y = "Total Negative Signs", x = "Time of Day")
 ```
 
 Why am I not getting a smoother for this plot?
 
 
-```{r}
-ggplot(data = turnout_data, mapping = aes(x = Flymask, y = Totalnegativesigns)) + geom_boxplot()
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Flymask, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Flymask vs. Total Negative Signs", y = "Total Negative Signs", x = "Flymask")
 ```
 
 This is interesting but the biggest takeaway from this plot is that there are two outliers in the "no flymask category"
 
-```{r}
-ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Totalnegativesigns)) + geom_boxplot()
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Flysheet vs. Total Negative Signs", y = "Total Negative Signs", x = "Flysheet")
 ```
 
 There is not a large difference here, again the outliers are the most significant things in this plot. 
 
-```{r}
-ggplot(data = turnout_data, mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) + geom_boxplot()
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Type of Turnout vs. Total Negative Signs", y = "Total Negative Signs", x = "Type of Turnout")
 ```
 
 It looks like certain fields have more success but it also needs to be considered which horses go in those fields. 
 
 
-```{r}
+```{r, echo=FALSE}
 ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
-  geom_point() + 
-  geom_smooth(method="lm") +
-  facet_wrap("Horse")
+  geom_point(color = "purple4") + geom_smooth(se = FALSE, color = "mediumpurple1", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Minutes Spent Pacing vs. Total Negative Signs", y = "Minutes Spent Pacing", x = "Time of Day")
 
 ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Group)) + 
-  geom_point() + 
-  geom_smooth(method="lm")
+ geom_point() + geom_smooth(method = lm) +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
 
 Exploring multilevel scenarios, it looks like Age and Group may be related, with different slopes for group and non-group, so as age increases in a group the group does better but as age increases in individual horses they do worse.
 
 <Br>
 
-```{r}
+```{r, echo=FALSE}
 ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Flymask)) + 
-  geom_point() + 
-  geom_smooth(method="lm")
+ geom_point() + geom_smooth(method = lm) +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
 
 Flymask also seems to have significant differences in slopes and intercepts.
 
 <Br>
 
-```{r}
-ggplot(turnout_data, aes(x=Personality,y=Totalnegativesigns)) + 
-  geom_boxplot(fill="steelblue")
+```{r, echo=FALSE}
+ggplot(turnout_data, aes(x=Personality,y=Totalnegativesigns)) + geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Personality vs. Total Negative Signs", y = "Total Negative Signs", x = "Personality")
 ```
 
 The different personalities definitely are different, and we have seen that each horse is different so we do need to account for the grouped horses. the personalities seem to make a difference in the slopes here but we have to be mindful of the fact that there are very few of each personalities. 
 
 <Br>
 
-```{r}
+```{r, echo=FALSE}
 ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Personality)) + 
-  geom_point() + 
-  geom_smooth(method="lm") 
+ geom_point() + geom_smooth(method = lm) +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
 
 
@@ -179,6 +211,7 @@ Unconditional means model:
 ```{r}
 unmeanmod = lmer(Totalnegativesigns ~ 1 + (1|Horse), data = turnout_data, REML = T)
 summary(unmeanmod)
+
 ```
 
 Looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) = 0.68, so this is a multilevel data set and needs to be allowed to have different intercepts and "slopes" for different horses. 
@@ -187,13 +220,33 @@ Looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) 
 
 ** Notes to self:
 
-Figure out smoother - line 110
+Figure out smoother - line 110!!
 
-Clean up boxplots and all graphs 
+Line 168/179/201 - how to make the two trend lines custom colors so they match the scheme.
 
-Put tables into pander so they are neater 
+Make boxplots have yes on left and no on right 
 
+How do I make color scheme for whole html output match?
 
+line 212 - putting unconditional means model into a nice table - how?
+
+How to make pretty doc output on my color scheme?
+
+Options:
+
+Color scheme for whole thing:
+
+firebrick2
+darkred
+saddlebrown
+tan3
+
+Color scheme for whole thing 2:
+
+mediumpurple1
+purple4
+olivedrab3
+navajowhite4
 
 
 
