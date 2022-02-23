@@ -81,6 +81,7 @@ library(lme4)
 library(knitr)
 library(pander)
 library(ggthemes)
+library(kableExtra)
 turnout_data <- read_excel("SYE data sheet.xlsx",
  col_types = c(
  ))
@@ -88,14 +89,30 @@ turnout_data <- read_excel("SYE data sheet.xlsx",
 turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes","No")) %>% 
   mutate(Flysheet = if_else(Flysheet == "x", "Yes", "No")) %>%
   mutate(Group = if_else(Group == "x", "Yes", "No")) %>%
-  replace(is.na(.), "No")
+  replace(is.na(.), "No") %>%
+  mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
+ arrange(Totalnegativesigns) 
 ```
 
 Using total negative signs instead of Overall because that is not as biased towards horses with turnout where there are grass.
 
 ```{r, echo=FALSE}
-turnout_data %>% group_by(Horse) %>% summarise(mean(Totalnegativesigns))
-turnout_data %>% group_by(Personality) %>% summarise(mean(Totalnegativesigns))
+negativehorse <- turnout_data %>% group_by(Horse) %>% summarise(meannegative = mean(Totalnegativesigns)) %>% arrange(meannegative)
+negativepersonality <- turnout_data %>% group_by(Personality) %>% summarise(meannegative = mean(Totalnegativesigns)) %>% arrange(meannegative)
+
+negativehorse %>% kable(digits = 2, caption = "Average Number of Negative Signs for each Horse",
+  col.names = c("Horse", "Average Negative Signs")) %>%
+  kable_styling(font_size = 20, position = "left", full_width = FALSE) %>% 
+  row_spec(c(1), color = "olivedrab3") 
+```
+
+<Br>
+
+```{r, echo = FALSE}
+kable(negativepersonality, digits = 2, caption = "Average Number of Negative Signs for each Personality",
+  col.names = c("Personality", "Average Negative Signs"))
+
+
 ggplot(data = turnout_data, mapping = aes(x = Personality, y = Totalnegativesigns)) +
   geom_boxplot(color = "purple4", fill = "mediumpurple1") +
   theme_stata() +
@@ -220,13 +237,15 @@ Looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) 
 
 ** Notes to self:
 
-Need to make everything ordered so the plots make sense
+Need to make everything ordered so the plots make sense - how to best do?
 
 Figure out smoother - line 110!!
 
 Line 168/179/201 - how to make the two trend lines custom colors so they match the scheme.
 
-Make boxplots have yes on left and no on right 
+Make boxplots have yes on left and no on right
+
+Change boxplots to dot and error bar plots so they show variability?
 
 How do I make color scheme for whole html output match?
 
