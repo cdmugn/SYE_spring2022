@@ -1,10 +1,10 @@
 ---
 title: "Equine Turnout at St. Lawrence University"
 subtitle: "Clara Mugnai"
-output: 
-  prettydoc::html_pretty:
-    theme: cayman
-    toc: true
+output:
+  rmdformats::readthedown:
+      toc_depth: 5
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE,message=FALSE, warning=FALSE)
 # Introduction
 
 
-This project is an exploration of turnout preferences for horses both in the St. Lawrence University riding program, and boarding at the school’s barn. The facility all of the horses were located at and all of the data was gathered at is the Elsa Gunnison Appleton Riding Hall, in Canton, NY. The horses were turned out in rotations based on where they had previously done well outside. They were then observed in 30-minute intervals and various behaviors were recorded.
+This project is an exploration of turnout preferences for horses both in the St. Lawrence University riding program and boarding at the school’s barn. Elsa Gunnison Appleton Riding Hall, in Canton, NY is the facility where all of the horses were located and all of the data was gathered. The horses were turned out in rotations based on where they had previously done well outside. They were then observed and various behaviors were recorded.
 
 Some variables of interest in the study were:
 
@@ -36,11 +36,11 @@ Some variables of interest in the study were:
 -	number_negative_interactions_w/friends - refer to Methods
 -	time_layingdown - minutes spent of the 30 observed, with the horse laying down
 
-Upon further research, it was confirmed that there are four different personality types and each type can be grouped into either passive or aggressive (Barteau). Barteau wrote an article published in Dressage Today in 2007. She is a U.S. national champion dressage rider, and discusses the four types of horse personalities that are seen in domestic horses. The types are; social, fearful, challenging, and aloof. She goes into detail with the characteristics of each type and the “1-10” scale of those personalities. She also states that there is a passive to aggressive scale that applies to each type, with examples of a passive and aggressive version of each personality. Finally, the article goes into how to determine a specific horse’s type and which behaviors and reactions can help you identify the type of personality you are looking at. Barteau goes on in the article to give examples of how to determine which personality type specific horses are, which was utilized in this study.
+There are four different personality types for horses and each type can be grouped into either passive or aggressive (Barteau). Barteau is a U.S. national champion dressage rider, and discusses the four types of horse personalities that are seen in domestic horses. The types are; social, fearful, challenging, and aloof. She goes into detail with the characteristics of each type and the “1-10” scale of those personalities. She also states that there is a passive to aggressive scale that applies to each type, with examples of a passive and aggressive version of each personality. Finally, the article goes into how to determine a specific horse’s type and which behaviors and reactions can help to identify the type of personality that is being presented. This was used as a model for how personalities of horses within this study were determined.
 
-An article by Foster also identifies horse personalities, the same four types as Barteau. The main focus of Foster’s article is  the way horses express discomfort with minimal movement. She identifies that the eyes and other facial indicators are the most informative signals and that changes in body posture and natural movement are other signals to how a horse feels in turnout (2019). She also discusses that certain horses have different baselines, and these behaviors are universally signals of discomfort.
+An article by Foster also identifies horse personalities, the same four types as Barteau. The main focus of Foster’s article is the way horses express discomfort with minimal movement. She identifies that the eyes and other facial indicators are the most informative signals and that changes in body posture and natural movement are other signals to how a horse feels in turnout (2019). She also discusses that certain horses have different baselines, and these behaviors are universally signals of discomfort.
 
-I used Foster’s article heavily as a way to determine what I should take into account when observing horses. There were certain accommodations made for the fact that there was a single researcher doing all of the observations, accounting for the times of day and the scale for the number of tail swishes. The outside research completed by others, as well as personal experience, weighed into the way the numerical scales were done. There was more emphasis on if a horse was grazing or calmy moving around the space, than on how many times something alerted them. The overall way they behave in turnout better indicates the contentedness of the horse than small moments of spooking or alarm. This is a consistent school of thought, across both sources referenced here (Foster, Barteau).
+Foster’s article was used heavily as a way to determine what should be taken into account when observing horses. There were certain accommodations made for the fact that there was a single researcher doing all of the observations, accounting for the times of day and the scale for the number of tail swishes. The outside research completed by others, as well as personal experience by the researcher, weighed into the way the numerical scales were done. There was more emphasis on if a horse was grazing or calmly moving around the space, than on how many times something alerted them. The overall way they behave in turnout better indicates the contentedness of the horse than small moments of spooking or alarm. This is a consistent school of thought, across both sources referenced here (Foster, Barteau).
 
 
 
@@ -82,6 +82,7 @@ library(knitr)
 library(pander)
 library(ggthemes)
 library(kableExtra)
+library(rmdformats)
 turnout_data <- read_excel("SYE data sheet.xlsx",
  col_types = c(
  ))
@@ -93,6 +94,8 @@ turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes",
   mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
  arrange(Totalnegativesigns) 
 ```
+
+### Tables
 
 Using total negative signs instead of Overall because that is not as biased towards horses with turnout where there are grass.
 
@@ -106,17 +109,21 @@ negativehorse %>% kable(digits = 2, caption = "Average Number of Negative Signs 
   row_spec(c(1), color = "olivedrab3") 
 ```
 
-<Br>
-
 ```{r, echo = FALSE}
 kable(negativepersonality, digits = 2, caption = "Average Number of Negative Signs for each Personality",
   col.names = c("Personality", "Average Negative Signs"))
 
+```
 
-ggplot(data = turnout_data, mapping = aes(x = Personality, y = Totalnegativesigns)) +
-  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+
+### Single Variable Boxplots
+
+
+```{r, echo = FALSE}
+ggplot(data = turnout_data %>% mutate(Personality= fct_reorder(Personality, Totalnegativesigns)), mapping = aes(x = Personality, y = Totalnegativesigns)) +
+  geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Horse Personality Types vs. Total Negative Signs", y = "Total Negative Signs", x = "Personality Type")
 ```
 
@@ -124,68 +131,73 @@ Interesting things happening but have to watch how many observations per group
 
 
 ```{r, echo=FALSE}
-ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+ggplot(data = turnout_data %>% mutate(Time_of_day= fct_reorder(Time_of_day, Totalnegativesigns)), mapping = aes(x = Time_of_day, y = Totalnegativesigns)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Time of Day vs. Total Negative Signs", y = "Total Negative Signs", x = "Time of Day")
 ```
 
 
-This is really chaotic and hard to interpret, with no clear trends.
 ```{r, echo=FALSE}
-ggplot(data = turnout_data, mapping = aes(x = Age, y = Totalnegativesigns)) + geom_point(color = "purple4") + geom_smooth(se = FALSE, color = "mediumpurple1") +  theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
-```
-
-
-A slight negative trend here but it is hard to interpret as there are very few observations on the left side of the plot.
-
-```{r, echo=FALSE}
-ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_point(color = "purple4") + geom_smooth(se = FALSE, color = "mediumpurple1") +  theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Time of Day vs. Total Negative Signs", y = "Total Negative Signs", x = "Time of Day")
-```
-
-Why am I not getting a smoother for this plot?
-
-
-```{r, echo=FALSE}
-ggplot(data = turnout_data, mapping = aes(x = Flymask, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+ggplot(data = turnout_data %>% mutate(Flymask = fct_reorder(Flymask, Totalnegativesigns)), mapping = aes(x = Flymask, y = Totalnegativesigns)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Flymask vs. Total Negative Signs", y = "Total Negative Signs", x = "Flymask")
 ```
 
 This is interesting but the biggest takeaway from this plot is that there are two outliers in the "no flymask category"
 
 ```{r, echo=FALSE}
-ggplot(data = turnout_data, mapping = aes(x = Flysheet, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+ggplot(data = turnout_data %>% mutate(Flysheet = fct_reorder(Flysheet, desc(Totalnegativesigns))), mapping = aes(x = Flysheet, y = Totalnegativesigns)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Flysheet vs. Total Negative Signs", y = "Total Negative Signs", x = "Flysheet")
 ```
 
 There is not a large difference here, again the outliers are the most significant things in this plot. 
 
 ```{r, echo=FALSE}
-ggplot(data = turnout_data, mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) +  geom_boxplot(color = "purple4", fill = "mediumpurple1") +
+ggplot(data = turnout_data %>% mutate(Type_of_turnout = fct_reorder(Type_of_turnout, Totalnegativesigns)), mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Type of Turnout vs. Total Negative Signs", y = "Total Negative Signs", x = "Type of Turnout")
 ```
 
 It looks like certain fields have more success but it also needs to be considered which horses go in those fields. 
 
 
+### Single Variable Scatterplots
+
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Age, y = Totalnegativesigns)) + geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred") +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
+```
+This is really chaotic and hard to interpret, with no clear trends.
+
+
+
+```{r, echo=FALSE}
+ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_jitter(color = "firebrick2") +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Time of Day vs. Total Negative Signs", y = "Total Negative Signs", x = "Time of Day")
+```
+A slight negative trend here but it is hard to interpret as there are very few observations on the left side of the plot.
+
 ```{r, echo=FALSE}
 ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
-  geom_point(color = "purple4") + geom_smooth(se = FALSE, color = "mediumpurple1", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Minutes Spent Pacing vs. Total Negative Signs", y = "Minutes Spent Pacing", x = "Time of Day")
 
-ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Group)) + 
+```
+
+
+### Comparing different Slopes in Scatterplots
+
+```{r, echo = FALSE}
+ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns, color = Group)) + 
  geom_point() + geom_smooth(method = lm) +  theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + scale_color_manual(values=c("firebrick2","darkred")) +
   labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
 
@@ -196,7 +208,7 @@ Exploring multilevel scenarios, it looks like Age and Group may be related, with
 ```{r, echo=FALSE}
 ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Flymask)) + 
  geom_point() + geom_smooth(method = lm) +  theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + scale_color_manual(values=c("firebrick2","darkred")) +
   labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
 
@@ -204,70 +216,32 @@ Flymask also seems to have significant differences in slopes and intercepts.
 
 <Br>
 
+
+
 ```{r, echo=FALSE}
-ggplot(turnout_data, aes(x=Personality,y=Totalnegativesigns)) + geom_boxplot(color = "purple4", fill = "mediumpurple1") +
-  theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Personality vs. Total Negative Signs", y = "Total Negative Signs", x = "Personality")
+ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Personality)) + 
+ geom_point(aes(shape = Personality)) + geom_smooth(method = lm) +  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + scale_color_brewer(type = "seq", palette = "YlOrRd")
+  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
+
 
 The different personalities definitely are different, and we have seen that each horse is different so we do need to account for the grouped horses. the personalities seem to make a difference in the slopes here but we have to be mindful of the fact that there are very few of each personalities. 
 
 <Br>
 
-```{r, echo=FALSE}
-ggplot(data=turnout_data,aes(x=Age,y=Totalnegativesigns,color=Personality)) + 
- geom_point() + geom_smooth(method = lm) +  theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "navajowhite4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
-```
-
-
+### Multilevel Unconditional Means Model
 
 Unconditional means model:
-```{r}
+```{r, echo=FALSE}
+library(sjPlot)
 unmeanmod = lmer(Totalnegativesigns ~ 1 + (1|Horse), data = turnout_data, REML = T)
-summary(unmeanmod)
+
+tab_model(unmeanmod)
 
 ```
 
-Looking at the unconditional means model, the ICC value is (35.79/(16.58+35.79) = 0.68, so this is a multilevel data set and needs to be allowed to have different intercepts and "slopes" for different horses. 
-
-
-
-** Notes to self:
-
-Need to make everything ordered so the plots make sense - how to best do?
-
-Figure out smoother - line 110!!
-
-Line 168/179/201 - how to make the two trend lines custom colors so they match the scheme.
-
-Make boxplots have yes on left and no on right
-
-Change boxplots to dot and error bar plots so they show variability?
-
-How do I make color scheme for whole html output match?
-
-line 212 - putting unconditional means model into a nice table - how?
-
-How to make pretty doc output on my color scheme?
-
-Options:
-
-Color scheme for whole thing:
-
-firebrick2
-darkred
-saddlebrown
-tan3
-
-Color scheme for whole thing 2:
-
-mediumpurple1
-purple4
-olivedrab3
-navajowhite4
+Looking at the unconditional means model, the ICC value is 0.683, with a significant p-value, so this is a multilevel data set and needs to be allowed to have different intercepts and "slopes" for different horses. 
 
 
 
