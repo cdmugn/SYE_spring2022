@@ -11,6 +11,8 @@ Comments March 3:
 
 Add a very short paragraph at the end giving an outline of what you will be discussing in the rest of the paper.
 
+
+
 Methods:
 
 "observations are outliers in that regard." usually outlier referes to an outlier in the response variable. If they are different than the way the other horses were
@@ -25,6 +27,8 @@ treated, maybe think about using a phrase involving representation instead.
 
 "kept and are ": delete
 
+
+
 EDA:
 
 "Average Number of Negative Signs for each Personality" table: add sample size column here.
@@ -37,6 +41,8 @@ know something that the reader should know about which horses tend to go in whic
 "This is really chaotic and hard to interpret, with no clear trends.": I wouldn't really call it "chaotic." I would just say that there does not seem to be a strong
 relationship between age and the number of negative signs, or something like that.
 
+
+
 Graphing Section: Maybe add something at the beginning that explains what each point is...is there one point per horse? or is it one point per horse observation?
 
 multilevel unconditional means model: it's common to actually write out the model and define each term....also, isn't this a test to see if the horses need different intercepts
@@ -45,6 +51,12 @@ multilevel unconditional means model: it's common to actually write out the mode
 need to add a wrap-up conclusion section. If you wanted the reader to take away just 2 or 3 things, what would these be?
 what are some limitations?
 what would you do if you had time to collect more data?
+
+
+
+
+
+
 
 Comments February 24:
 
