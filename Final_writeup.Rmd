@@ -36,11 +36,11 @@ Some variables of interest in the study were:
 -	number_negative_interactions_w/friends - refer to Methods
 -	time_layingdown - minutes spent of the 30 observed, with the horse laying down
 
-There are four different personality types for horses and each type can be grouped into either passive or aggressive (Barteau). Barteau is a U.S. national champion dressage rider, and discusses the four types of horse personalities that are seen in domestic horses. The types are; social, fearful, challenging, and aloof. She goes into detail with the characteristics of each type and the “1-10” scale of those personalities. She also states that there is a passive to aggressive scale that applies to each type, with examples of a passive and aggressive version of each personality. Finally, the article goes into how to determine a specific horse’s type and which behaviors and reactions can help to identify the type of personality that is being presented. This was used as a model for how personalities of horses within this study were determined.
+There are four different personality types for horses and each type can be grouped into either passive or aggressive (Barteau). Barteau is a U.S. national champion dressage rider, and discusses the four types of horse personalities that are seen in domestic horses. The types are social, fearful, challenging, and aloof. She goes into detail with the characteristics of each type and the “1-10” scale of those personalities. She also states that there is a passive to aggressive scale that applies to each type. Finally, the article goes into how to determine a specific horse’s type and which behaviors and reactions can help to identify the type of personality that is being presented. This was used as a model for how personalities of horses within this study were determined.
 
 An article by Foster also identifies horse personalities, the same four types as Barteau. The main focus of Foster’s article is the way horses express discomfort with minimal movement. She identifies that the eyes and other facial indicators are the most informative signals and that changes in body posture and natural movement are other signals to how a horse feels in turnout (2019). She also discusses that certain horses have different baselines, and these behaviors are universally signals of discomfort.
 
-Foster’s article was used heavily as a way to determine what should be taken into account when observing horses. There were certain accommodations made for the fact that there was a single researcher doing all of the observations, accounting for the times of day and the scale for the number of tail swishes. The outside research completed by others, as well as personal experience by the researcher, weighed into the way the numerical scales were done. There was more emphasis on if a horse was grazing or calmly moving around the space, than on how many times something alerted them. The overall way they behave in turnout better indicates the contentedness of the horse than small moments of spooking or alarm. This is a consistent school of thought, across both sources referenced here (Foster, Barteau).
+Foster’s article was used heavily as a way to determine what should be taken into account when observing horses. There were certain accommodations made for the fact that there was a single researcher doing all of the observations, specifically the times of day and the scale for the number of tail swishes. The outside research completed by others, as well as personal experience by the researcher, weighed into the way the numerical scales were done. There was more emphasis on if a horse was grazing or calmly moving around the space than on how many times something alerted them. The overall way they behave in turnout better indicates the contentedness of the horse than small moments of spooking or alarm (Foster, Barteau).
 
 
 
@@ -53,7 +53,7 @@ Site Map: Elsa Gunnison Appleton Riding Hall
 Horses were observed for 30-minute intervals in their natural turnout environments and groups. The intervals in which they were observed were randomized as much as possible, as well as the locations they were in. My personal class schedule and the weather dictated which days and times worked to observe in, and I attempted to rotate through the fields the same way the entire time I took observations. I started in the white rings and moved in a clockwise direction around the fields (white rings, round-pens, medicals, hunt field, boys 3, boys 2,etc).  The horses take turns going out, at the discretion of the barn manager, and that is not a set schedule so the ones being observed changed each week. 
 	
 
-It is important to note that the turnout location of a medical has no grass for them to graze on, only hay put there by humans, so those observations are outliers in that regard. During observation time it was noted how many minutes were spent both grazing (a positive behavior) and pacing (a negative behavior), while acknowledging that they could be doing neither of those things. In addition to that, the number of times they whinnied, dilated their nostrils, or had a rigid body posture were noted as negative signs in turnout. For horses both alone and with friends in turnout it was noted how many positive or negative social interactions they had with each other. Positive interactions were things like nuzzling or grooming and negative were running, chasing, or causing one another distress. Horses in solitary turnout could still be bothered or settled down by neighboring horses so they could have positive or negative interactions, as well. Finally, it was noted how often the horses were swishing their tails with the following scale:  
+It is important to note that the turnout location of a medical has no grass for them to graze on, only hay put there by humans, so those observations are not well represented by grazing time. During observation time it was noted how many minutes were spent both grazing (a positive behavior) and pacing (a negative behavior), while acknowledging that they could be doing neither of those things. In addition to that, the number of times they whinnied, dilated their nostrils, or had a rigid body posture were noted as negative signs in turnout. For horses both alone and with friends in turnout it was noted how many positive or negative social interactions they had with each other. Positive interactions were things like nuzzling or grooming and negative were running, chasing, or causing one another distress. Horses in solitary turnout could still be bothered or settled down by neighboring horses so they could have positive or negative interactions, as well. Finally, it was noted how often the horses were swishing their tails with the following scale, having both positive and negative impacts:  
 
 - Frequent – almost constant – score 4 negative
 - Often – regularly – score 2 negative
@@ -63,10 +63,10 @@ It is important to note that the turnout location of a medical has no grass for 
 
 Note: The scale used for finding these numbers was arbitrary, and chosen for the fact that it made sense given the importance of tail swishing compared to the overall turnout scores for each horse. The total number of tail swishes per horse, per observation session, were not possible to be observed so this scale was chosen instead. 
 
-Upon the completion of data collection overall turnout scores were calculated. This was done by adding; the minutes grazing, tail swishing score (if positive) , positive friend interactions, and minutes laying down together to be a positive score. Negative scores were; the sum of minutes pacing, tail swishing score (if negative), occurrences of body tension, whinnying, nostril dilation, and negative friend interactions (Foster). Choosing to add these numbers together was a subjective decision because every observation was 30 minutes long and all of the things that indicated a pleasant time for the horse were considered positive, all of the unpleasant things were considered negative (Paddock Anxiety). The positive and negative scores were then added together to give an overall turnout score. 
+Upon the completion of data collection, overall turnout scores were calculated. This was done by adding the minutes grazing, tail swishing score (if positive), positive friend interactions, and minutes laying down together to be a positive score. Negative scores were; the sum of minutes pacing, tail swishing score (if negative), occurrences of body tension, whinnying, nostril dilation, and negative friend interactions (Foster). Choosing to add these numbers together was a subjective decision because every observation was 30 minutes long and all of the things that indicated a pleasant time for the horse were considered positive, all of the unpleasant things were considered negative (Paddock Anxiety). The positive and negative scores were then added together to give an overall turnout score. 
 	
 	
-For any horses that appeared 3 or more times in the data set, their observations were kept and are included in the final data set. Those horses were each then observed for approximately 10 minutes in the barn to quickly assess their personality types. In those 10 minutes they were exposed to new stimuli in the form of a human, another horse, and a foreign object to see how they reacted. Based on those reactions they were classified as either social, aloof, challenging, or fearful. For each type there was both a passive or aggressive form, depending on how fast or intense the reactions to the stimuli were (Barteau). 
+For any horses that appeared 3 or more times in the data set, their observations were included in the final data set. Those horses were each then observed for approximately 10 minutes in the barn to quickly assess their personality types. In those 10 minutes they were exposed to new stimuli in the form of a human, another horse, and a foreign object to see how they reacted. Based on those reactions they were classified as either social, aloof, challenging, or fearful. For each type there was both a passive or aggressive form, depending on how fast or intense the reactions to the stimuli were (Barteau). 
 	
 
 # Exploratory Analysis 
@@ -83,6 +83,7 @@ library(pander)
 library(ggthemes)
 library(kableExtra)
 library(rmdformats)
+library(lubridate)
 turnout_data <- read_excel("SYE data sheet.xlsx",
  col_types = c(
  ))
@@ -101,7 +102,7 @@ Using total negative signs instead of Overall because that is not as biased towa
 
 ```{r, echo=FALSE}
 negativehorse <- turnout_data %>% group_by(Horse) %>% summarise(meannegative = mean(Totalnegativesigns)) %>% arrange(meannegative)
-negativepersonality <- turnout_data %>% group_by(Personality) %>% summarise(meannegative = mean(Totalnegativesigns)) %>% arrange(meannegative)
+negativepersonality <- turnout_data %>% group_by(Personality) %>% summarise(meannegative = mean(Totalnegativesigns), count = n()) %>% arrange(meannegative)
 
 negativehorse %>% kable(digits = 2, caption = "Average Number of Negative Signs for each Horse",
   col.names = c("Horse", "Average Negative Signs")) %>%
@@ -111,7 +112,7 @@ negativehorse %>% kable(digits = 2, caption = "Average Number of Negative Signs 
 
 ```{r, echo = FALSE}
 kable(negativepersonality, digits = 2, caption = "Average Number of Negative Signs for each Personality",
-  col.names = c("Personality", "Average Negative Signs"))
+  col.names = c("Personality", "Average Negative Signs", "Sample Size"))
 
 ```
 
@@ -163,17 +164,19 @@ ggplot(data = turnout_data %>% mutate(Type_of_turnout = fct_reorder(Type_of_turn
   labs(title = "Type of Turnout vs. Total Negative Signs", y = "Total Negative Signs", x = "Type of Turnout")
 ```
 
-It looks like certain fields have more success but it also needs to be considered which horses go in those fields. 
+It looks like certain fields have more success but it also needs to be considered which horses go in those fields. For example, the medical paddocks and the roundpens are the closest ones to the barn and hold the least relaxed horses. Those fields also have two of the highest negative scores. However, if horses were randomly assigned to fields that would probably not be the case.
 
 
 ### Single Variable Scatterplots
+
+In this section, each point is representing a single observation period. So there are 3-4 points per horse, and 59 points total on each graph.
 
 ```{r, echo=FALSE}
 ggplot(data = turnout_data, mapping = aes(x = Age, y = Totalnegativesigns)) + geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred") +  theme_stata() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Age vs. Total Negative Signs", y = "Total Negative Signs", x = "Age")
 ```
-This is really chaotic and hard to interpret, with no clear trends.
+There does not seem to be a strong relationship between age and the number of negative signs. The slight downward trend may be due to the small sample sizes at the ends of the trend line, in the center where there are more data points there is less of a trend.
 
 
 
@@ -241,13 +244,20 @@ tab_model(unmeanmod)
 
 ```
 
-Looking at the unconditional means model, the ICC value is 0.683, with a significant p-value, so this is a multilevel data set and needs to be allowed to have different intercepts and "slopes" for different horses. 
+Looking at the unconditional means model, the ICC value is 0.683, with a significant p-value, so this is a multilevel data set and needs to be allowed to have different intercepts for different horses. 
+
+
+### Conclusion
+
+Some take-aways from this are that personality type does seem to make difference to horse success in turnout. Flymask use also seems to make a difference to success in turnout. For interactions, it seems like age and group seem to interact with turnout success, as well as ago and flymask. 
+
+Limitations to this study are both few observations and a lack of randomization. The modeling would be a lot more significant if there were enough observations to result in significant and meaningful p-values, and if randomization had been more attainable the issues with field type causing a trend would not happen. Those things would make this study a lot more applicable to be used beyond a singlular viewing tool, and instead as a predicting model. 
 
 
 
 # Citations
 
-  Barteau, Y. (2009, March 5). Understanding horse personalities, part 1: The 4 basic personality 	types. Dressage Today. Retrieved December 9, 2021, from 	https://dressagetoday.com/theory/horse-personalities-basic-types. 
+  Barteau, Y. (2009, March 5). Understanding horse personalities, part 1: The 4 basic personality	types. Dressage Today. Retrieved December 9, 2021, from 	https://dressagetoday.com/theory/horse-personalities-basic-types. 
 
   Chaya, L., Cowan, E., & McGuire, B. (2006). A note on the relationship between time spent in 	turnout and behavior during turnout in horses (Equus caballus). Applied Animal 	Behavior Science, 98(1-2), 155–160.             https://doi.org/10.1016/j.applanim.2005.08.020 
 
