@@ -253,6 +253,65 @@ Some take-aways from this are that personality type does seem to make difference
 
 Limitations to this study are both few observations and a lack of randomization. The modeling would be a lot more significant if there were enough observations to result in significant and meaningful p-values, and if randomization had been more attainable the issues with field type causing a trend would not happen. Those things would make this study a lot more applicable to be used beyond a singlular viewing tool, and instead as a predicting model. 
 
+# Shiny Application
+
+```{r,echo = FALSE, include=FALSE}
+library(shiny)
+
+ui <- fluidPage(navlistPanel(tabPanel("Personality",
+  sidebarLayout(sidebarPanel(
+    selectizeInput("Personality",
+                   label = "Choose a Personality Type", choices = levels(factor(turnout_data$Personality)), selected = "Aloof - Passive", multiple = TRUE)),
+    mainPanel(plotOutput("boxplot1", height = 600),
+              tableOutput("table1")),
+    )
+    ),
+  tabPanel("Horse",
+  sidebarLayout(sidebarPanel(
+    selectizeInput("Horse",
+                   label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), selected = "Juno", multiple = TRUE)),
+    mainPanel(plotOutput("scatterplot", height = 600)),
+      )
+    )
+  ))
+
+server <- function(input, output, session) {
+  
+   personality_df <- reactive({turnout_data %>% filter(Personality == input$Personality)
+   })
+   meanpersonality <- reactive({negativepersonality %>% filter(Personality == input$Personality)
+     })
+   horse_df <- reactive({turnout_data %>% filter(Horse == input$Horse)
+     })
+   
+  output$boxplot1 <- renderPlot({
+    
+ggplot(data = personality_df() %>% mutate(Personality= fct_reorder(Personality, Totalnegativesigns)), mapping = aes(x = Personality, y = Totalnegativesigns)) +
+  geom_boxplot(color = "firebrick2", fill = "darkred") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Horse Personality Types vs. Total Negative Signs", y = "Total Negative Signs", x = "Personality Type")
+  })
+  
+  output$table1 <- renderTable({
+    meanpersonality()
+  })
+  output$scatterplot <- renderPlot({ 
+    
+  ggplot(horse_df(), aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
+  geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Minutes Spent Pacing vs. Total Negative Signs", y = "Minutes Spent Pacing", x = "Time of Day")
+    
+  })
+}
+
+shinyApp(ui, server)
+```
+
+
+
+
+
 
 
 # Citations
