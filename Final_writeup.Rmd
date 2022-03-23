@@ -259,22 +259,18 @@ Limitations to this study are both few observations and a lack of randomization.
 library(shiny)
 
 ui <- fluidPage(navlistPanel(tabPanel("Personality",
-  sidebarLayout(sidebarPanel(
-    selectizeInput("Personality",
-                   label = "Choose a Personality Type", choices = levels(factor(turnout_data$Personality)), selected = "Aloof - Passive", multiple = TRUE)),
-    mainPanel(plotOutput("boxplot1", height = 600),
+  verticalLayout(selectizeInput("Personality",
+                   label = "Choose a Personality Type", choices = levels(factor(turnout_data$Personality)), selected =   "Aloof - Passive", multiple = TRUE)),
+    plotOutput("boxplot1", height = 600),
               tableOutput("table1")),
-    )
-    ),
   tabPanel("Horse",
-  sidebarLayout(sidebarPanel(
+  verticalLayout(
     selectizeInput("Horse",
-                   label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), selected = "Juno", multiple = TRUE)),
-    mainPanel(plotOutput("scatterplot", height = 600)),
+                   label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), selected = "Juno", multiple = TRUE),
+    plotOutput("scatterplot", height = 600)),
       )
     )
-  ))
-
+  )
 server <- function(input, output, session) {
   
    personality_df <- reactive({turnout_data %>% filter(Personality == input$Personality)
@@ -304,7 +300,6 @@ ggplot(data = personality_df() %>% mutate(Personality= fct_reorder(Personality, 
     
   })
 }
-
 shinyApp(ui, server)
 ```
 
