@@ -92,6 +92,7 @@ turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes",
   mutate(Flysheet = if_else(Flysheet == "x", "Yes", "No")) %>%
   mutate(Group = if_else(Group == "x", "Yes", "No")) %>%
   replace(is.na(.), "No") %>%
+  # start with a seperate and then look 
   mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
  arrange(Totalnegativesigns) 
 ```
@@ -273,11 +274,11 @@ ui <- fluidPage(navlistPanel(tabPanel("Personality",
   )
 server <- function(input, output, session) {
   
-   personality_df <- reactive({turnout_data %>% filter(Personality == input$Personality)
+   personality_df <- reactive({turnout_data %>% filter(Personality %in% input$Personality)
    })
-   meanpersonality <- reactive({negativepersonality %>% filter(Personality == input$Personality)
+   meanpersonality <- reactive({negativepersonality %>% filter(Personality %in% input$Personality)
      })
-   horse_df <- reactive({turnout_data %>% filter(Horse == input$Horse)
+   horse_df <- reactive({turnout_data %>% filter(Horse %in% input$Horse)
      })
    
   output$boxplot1 <- renderPlot({
