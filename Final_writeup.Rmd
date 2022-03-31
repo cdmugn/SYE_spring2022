@@ -83,7 +83,7 @@ library(pander)
 library(ggthemes)
 library(kableExtra)
 library(rmdformats)
-library(lubridate)
+library(hms)
 turnout_data <- read_excel("SYE data sheet.xlsx",
  col_types = c(
  ))
@@ -91,11 +91,31 @@ turnout_data <- read_excel("SYE data sheet.xlsx",
 turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes","No")) %>% 
   mutate(Flysheet = if_else(Flysheet == "x", "Yes", "No")) %>%
   mutate(Group = if_else(Group == "x", "Yes", "No")) %>%
-  replace(is.na(.), "No") %>%
-  # start with a seperate and then look 
+  replace(is.na(.), "No") %>% # separate(col = Time_of_day, into = c("Start_time", "End_time"), 
+  # sep = "-") %>% 
   mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
  arrange(Totalnegativesigns) 
+
+# none of the things below worked to fix the times, I am deep in the world of stack exchange and very stuck. Thanks for the help!
+
+#turnoutdata <- turnout_data %>% mutate(Start_time = hms(Start_time))
+
+# hms(turnout_data$Start_time)
+
+#as.duration(hms(`Start time`)) %>%
+
+#turnout_data_time <- turnout_data %>% strptime(Start_time, format = "%H:%M", tz = "EST")
+
 ```
+
+attempts that failed to convert the dates:
+
+  as.duration(hms(`Start time`)) %>%
+
+
+
+
+
 
 ### Tables
 
@@ -259,16 +279,22 @@ Limitations to this study are both few observations and a lack of randomization.
 ```{r,echo = FALSE, include=FALSE}
 library(shiny)
 
-ui <- fluidPage(navlistPanel(tabPanel("Personality",
-  verticalLayout(selectizeInput("Personality",
-                   label = "Choose a Personality Type", choices = levels(factor(turnout_data$Personality)), selected =   "Aloof - Passive", multiple = TRUE)),
-    plotOutput("boxplot1", height = 600),
-              tableOutput("table1")),
+ui <- fluidPage(
+  titlePanel("Horse Turnout Preferences at St. Lawrence University"),
+  tabsetPanel(tabPanel("Personality",
+    fluidRow(
+      column(2,
+          selectizeInput("Personality", label = "Choose a Personality Type", 
+                         choices = levels(factor(turnout_data$Personality)), 
+                        selected = "Aloof - Passive", multiple = TRUE))),
+      column(8, plotOutput("boxplot1", height = 600)),
+      column(4, tableOutput("table1"))),
   tabPanel("Horse",
-  verticalLayout(
-    selectizeInput("Horse",
-                   label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), selected = "Juno", multiple = TRUE),
-    plotOutput("scatterplot", height = 600)),
+    verticalLayout(
+          selectizeInput("Horse",
+                   label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), 
+                   selected = "Juno", multiple = TRUE),
+            plotOutput("scatterplot", height = 600)),
       )
     )
   )
@@ -291,7 +317,7 @@ ggplot(data = personality_df() %>% mutate(Personality= fct_reorder(Personality, 
   })
   
   output$table1 <- renderTable({
-    meanpersonality()
+    meanpersonality() %>% rename("Mean Negative Score" = "meannegative", "Number Observations" = "count")
   })
   output$scatterplot <- renderPlot({ 
     
@@ -304,8 +330,67 @@ ggplot(data = personality_df() %>% mutate(Personality= fct_reorder(Personality, 
 shinyApp(ui, server)
 ```
 
+Change first tab to be choices of the x variable as well as personality...
 
+This is kind of broken, the plot is not adjusting to the plot based on user chosen x. 
 
+```{r,echo = FALSE, include=FALSE}
+library(shiny)
+
+var_choice <- turnout_data %>% select(4,7,8,10)
+
+ui <- fluidPage(
+  titlePanel("Horse Turnout Preferences at St. Lawrence University"),
+  tabsetPanel(tabPanel("Personality",
+    fluidRow(
+      column(2,
+          selectizeInput("Personality", label = "Choose a Personality Type", 
+                         choices = levels(factor(turnout_data$Personality)), 
+                        selected = "Aloof - Passive", multiple = TRUE)),
+        radioButtons("varchoice", label = "Choose a Statistic",
+                 choices = var_choice)),
+      column(8, plotOutput("boxplot1", height = 600)),
+      column(4, tableOutput("table1"))),
+  tabPanel("Horse",
+    verticalLayout(
+          selectizeInput("Horse",
+                   label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), 
+                   selected = "Juno", multiple = TRUE),
+            plotOutput("scatterplot", height = 600)),
+      )
+    )
+  )
+server <- function(input, output, session) {
+  
+   personality_df <- reactive({turnout_data %>% filter(Personality %in% input$Personality)
+   })
+   meanpersonality <- reactive({negativepersonality %>% filter(Personality %in% input$Personality)
+     })
+   horse_df <- reactive({turnout_data %>% filter(Horse %in% input$Horse)
+     })
+   
+  output$boxplot1 <- renderPlot({
+    
+ggplot(data = personality_df() %>% mutate(Personality= fct_reorder(Personality, Totalnegativesigns)), aes(x = .data[[input$varchoice]], y = Totalnegativesigns)) +
+  geom_boxplot(color = "firebrick2", fill = "darkred") +
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(y = "Total Negative Signs")
+  })
+  
+  output$table1 <- renderTable({
+    meanpersonality() %>% rename("Mean Negative Score" = "meannegative", "Number Observations" = "count")
+  })
+  output$scatterplot <- renderPlot({ 
+    
+  ggplot(horse_df(), aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
+  geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+  labs(title = "Minutes Spent Pacing vs. Total Negative Signs", y = "Minutes Spent Pacing", x = "Time of Day")
+    
+  })
+}
+shinyApp(ui, server)
+```
 
 
 
