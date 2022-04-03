@@ -98,7 +98,33 @@ turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes",
 
 # none of the things below worked to fix the times, I am deep in the world of stack exchange and very stuck. Thanks for the help!
 
-#turnoutdata <- turnout_data %>% mutate(Start_time = hms(Start_time))
+library(lubridate)
+## testing this out
+make_datetime(hour = 7, min = 30)
+
+start_test_df <- turnout_data %>% 
+  separate(Time_of_day, into = c("start", "end"), sep = "-") %>%
+  separate(start, into = c("new_hour", "new_minute", sep = ":")) %>%
+  mutate(new_hour = as.numeric(new_hour),
+         new_minute = as.numeric(new_minute)) %>%
+  mutate(new_minute = if_else(is.na(new_minute),
+                              true = 0, false = new_minute)) %>%
+  mutate(time = make_datetime(hour = new_hour, min = new_minute))
+
+ggplot(data = start_test_df, aes(x = time, y = Age)) + 
+  geom_point()
+
+## next steps:
+## use stringr function to pull out a.m. or p.m. from the 
+## end time
+## googling something like "keep only text in a variable in r"
+## or "get rid of numbers in a string in r" 
+## might also help
+## 
+## use if_else to say that if it's p.m., add 12 hours to the time.
+
+
+
 
 # hms(turnout_data$Start_time)
 
