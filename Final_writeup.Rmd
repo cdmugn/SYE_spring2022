@@ -91,8 +91,8 @@ turnout_data <- read_excel("SYE data sheet.xlsx",
 turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes","No")) %>% 
   mutate(Flysheet = if_else(Flysheet == "x", "Yes", "No")) %>%
   mutate(Group = if_else(Group == "x", "Yes", "No")) %>%
-  replace(is.na(.), "No") %>% # separate(col = Time_of_day, into = c("Start_time", "End_time"), 
-  # sep = "-") %>% 
+  replace(is.na(.), "No") %>%  separate(col = Time_of_day, into = c("Start_time", "End_time"), 
+   sep = "-") %>% 
   mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
  arrange(Totalnegativesigns) 
 
@@ -102,17 +102,23 @@ library(lubridate)
 ## testing this out
 make_datetime(hour = 7, min = 30)
 
-start_test_df <- turnout_data %>% 
-  separate(Time_of_day, into = c("start", "end"), sep = "-") %>%
+turnout_data %>% mutate(Start_time = Start_time + if_else(`A.M./P.M.` == "p.m.",12,0))
+
+start_test_df <- turnout_data %>%
   separate(start, into = c("new_hour", "new_minute", sep = ":")) %>%
   mutate(new_hour = as.numeric(new_hour),
          new_minute = as.numeric(new_minute)) %>%
   mutate(new_minute = if_else(is.na(new_minute),
                               true = 0, false = new_minute)) %>%
-  mutate(time = make_datetime(hour = new_hour, min = new_minute))
+  mutate(time = make_datetime(hour = new_hour, min = new_minute)) %>%
+  mutate(time = time + if_else(`A.M./P.M.` == "p.m.",12,0))
+
+
 
 ggplot(data = start_test_df, aes(x = time, y = Age)) + 
   geom_point()
+
+
 
 ## next steps:
 ## use stringr function to pull out a.m. or p.m. from the 
@@ -126,19 +132,10 @@ ggplot(data = start_test_df, aes(x = time, y = Age)) +
 
 
 
-# hms(turnout_data$Start_time)
-
-#as.duration(hms(`Start time`)) %>%
-
-#turnout_data_time <- turnout_data %>% strptime(Start_time, format = "%H:%M", tz = "EST")
-
 ```
 
-attempts that failed to convert the dates:
-
-  as.duration(hms(`Start time`)) %>%
-
-
+- I changed the original read in data so that there is an am/pm column instead of seperating it from time so that is there now. 
+- trying to use if_else to make r add 12 when it is pm but I am not having a lot of success.
 
 
 
@@ -363,7 +360,7 @@ This is kind of broken, the plot is not adjusting to the plot based on user chos
 ```{r,echo = FALSE, include=FALSE}
 library(shiny)
 
-var_choice <- turnout_data %>% select(4,7,8,10)
+var_choice <- turnout_data %>% select(6,8,9,11)
 
 ui <- fluidPage(
   titlePanel("Horse Turnout Preferences at St. Lawrence University"),
@@ -397,7 +394,7 @@ server <- function(input, output, session) {
    
   output$boxplot1 <- renderPlot({
     
-ggplot(data = personality_df() %>% mutate(Personality= fct_reorder(Personality, Totalnegativesigns)), aes(x = .data[[input$varchoice]], y = Totalnegativesigns)) +
+ggplot(data = personality_df(), aes(x = .data[[input$varchoice]], y = Totalnegativesigns)) +
   geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
