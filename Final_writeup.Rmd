@@ -91,32 +91,33 @@ turnout_data <- read_excel("SYE data sheet.xlsx",
 turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes","No")) %>% 
   mutate(Flysheet = if_else(Flysheet == "x", "Yes", "No")) %>%
   mutate(Group = if_else(Group == "x", "Yes", "No")) %>%
-  replace(is.na(.), "No") %>%  separate(col = Time_of_day, into = c("Start_time", "End_time"), 
-   sep = "-") %>% 
+  replace(is.na(.), "No") %>%  
   mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
  arrange(Totalnegativesigns) 
 
 # none of the things below worked to fix the times, I am deep in the world of stack exchange and very stuck. Thanks for the help!
 
-library(lubridate)
+#library(lubridate)
 ## testing this out
-make_datetime(hour = 7, min = 30)
 
-turnout_data %>% mutate(Start_time = Start_time + if_else(`A.M./P.M.` == "p.m.",12,0))
+#make_datetime(hour = 7, min = 30)
 
-start_test_df <- turnout_data %>%
-  separate(start, into = c("new_hour", "new_minute", sep = ":")) %>%
-  mutate(new_hour = as.numeric(new_hour),
-         new_minute = as.numeric(new_minute)) %>%
-  mutate(new_minute = if_else(is.na(new_minute),
-                              true = 0, false = new_minute)) %>%
-  mutate(time = make_datetime(hour = new_hour, min = new_minute)) %>%
-  mutate(time = time + if_else(`A.M./P.M.` == "p.m.",12,0))
+#turnout_data %>% mutate(Start_time = Start_time + if_else(`A.M./P.M.` == "p.m.",12,0))
+
+#start_test_df <- turnout_data %>%
+#  separate(Start_time, into = c("new_hour", "new_minute", sep = ":"))
+
+#%>%
+#  mutate(new_hour = as.numeric(new_hour),
+#         new_minute = as.numeric(new_minute)) %>%
+#  mutate(new_minute = if_else(is.na(new_minute),
+#                              true = 0, false = new_minute)) %>%
+#  mutate(time = make_datetime(hour = new_hour, min = new_minute))
 
 
 
-ggplot(data = start_test_df, aes(x = time, y = Age)) + 
-  geom_point()
+#ggplot(data = start_test_df, aes(x = time, y = Age)) + 
+ # geom_point()
 
 
 
@@ -176,7 +177,7 @@ Interesting things happening but have to watch how many observations per group
 
 
 ```{r, echo=FALSE}
-ggplot(data = turnout_data %>% mutate(Time_of_day= fct_reorder(Time_of_day, Totalnegativesigns)), mapping = aes(x = Time_of_day, y = Totalnegativesigns)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
+ggplot(data = turnout_data, mapping = aes(x = Start_time, y = Totalnegativesigns, group = Start_time)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Time of Day vs. Total Negative Signs", y = "Total Negative Signs", x = "Time of Day")
@@ -225,16 +226,16 @@ There does not seem to be a strong relationship between age and the number of ne
 
 
 ```{r, echo=FALSE}
-ggplot(data = turnout_data, mapping = aes(x = Time_of_day, y = Totalnegativesigns)) + geom_jitter(color = "firebrick2") +  theme_stata() +
+ggplot(data = turnout_data, mapping = aes(group = Start_time, y = Totalnegativesigns, x = Start_time)) + geom_jitter(color = "firebrick2") +  theme_stata() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Time of Day vs. Total Negative Signs", y = "Total Negative Signs", x = "Time of Day")
 ```
-A slight negative trend here but it is hard to interpret as there are very few observations on the left side of the plot.
+There appears to be no trend in total negative signs as the time of day for turnout changes.
 
 ```{r, echo=FALSE}
-ggplot(turnout_data, aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
+ggplot(turnout_data, aes(x=Start_time,y=minutes_spent_pacing)) + 
   geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Minutes Spent Pacing vs. Total Negative Signs", y = "Minutes Spent Pacing", x = "Time of Day")
+  labs(title = "Minutes Spent Pacing vs. Time of Day", y = "Minutes Spent Pacing", x = "Time of Day")
 
 ```
 
@@ -295,76 +296,26 @@ Looking at the unconditional means model, the ICC value is 0.683, with a signifi
 
 Some take-aways from this are that personality type does seem to make difference to horse success in turnout. Flymask use also seems to make a difference to success in turnout. For interactions, it seems like age and group seem to interact with turnout success, as well as ago and flymask. 
 
-Limitations to this study are both few observations and a lack of randomization. The modeling would be a lot more significant if there were enough observations to result in significant and meaningful p-values, and if randomization had been more attainable the issues with field type causing a trend would not happen. Those things would make this study a lot more applicable to be used beyond a singlular viewing tool, and instead as a predicting model. 
+Limitations to this study are both few observations and a lack of randomization. The modeling would be a lot more significant if there were enough observations to result in significant and meaningful p-values, and if randomization had been more attainable the issues with field type causing a trend would not happen. Those things would make this study a lot more applicable to be used beyond a singular viewing tool, and instead as a predicting model. 
 
 # Shiny Application
 
 ```{r,echo = FALSE, include=FALSE}
 library(shiny)
 
-ui <- fluidPage(
-  titlePanel("Horse Turnout Preferences at St. Lawrence University"),
-  tabsetPanel(tabPanel("Personality",
-    fluidRow(
-      column(2,
-          selectizeInput("Personality", label = "Choose a Personality Type", 
-                         choices = levels(factor(turnout_data$Personality)), 
-                        selected = "Aloof - Passive", multiple = TRUE))),
-      column(8, plotOutput("boxplot1", height = 600)),
-      column(4, tableOutput("table1"))),
-  tabPanel("Horse",
-    verticalLayout(
-          selectizeInput("Horse",
-                   label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), 
-                   selected = "Juno", multiple = TRUE),
-            plotOutput("scatterplot", height = 600)),
-      )
-    )
-  )
-server <- function(input, output, session) {
-  
-   personality_df <- reactive({turnout_data %>% filter(Personality %in% input$Personality)
-   })
-   meanpersonality <- reactive({negativepersonality %>% filter(Personality %in% input$Personality)
-     })
-   horse_df <- reactive({turnout_data %>% filter(Horse %in% input$Horse)
-     })
-   
-  output$boxplot1 <- renderPlot({
-    
-ggplot(data = personality_df() %>% mutate(Personality= fct_reorder(Personality, Totalnegativesigns)), mapping = aes(x = Personality, y = Totalnegativesigns)) +
-  geom_boxplot(color = "firebrick2", fill = "darkred") +
-  theme_stata() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Horse Personality Types vs. Total Negative Signs", y = "Total Negative Signs", x = "Personality Type")
-  })
-  
-  output$table1 <- renderTable({
-    meanpersonality() %>% rename("Mean Negative Score" = "meannegative", "Number Observations" = "count")
-  })
-  output$scatterplot <- renderPlot({ 
-    
-  ggplot(horse_df(), aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
-  geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Minutes Spent Pacing vs. Total Negative Signs", y = "Minutes Spent Pacing", x = "Time of Day")
-    
-  })
-}
-shinyApp(ui, server)
-```
-
-Change first tab to be choices of the x variable as well as personality...
-
-This is kind of broken, the plot is not adjusting to the plot based on user chosen x. 
-
-```{r,echo = FALSE, include=FALSE}
-library(shiny)
-
-var_choice <- turnout_data %>% select(6,8,9,11)
+var_choice <- names(turnout_data)[7:10]
 
 ui <- fluidPage(
   titlePanel("Horse Turnout Preferences at St. Lawrence University"),
-  tabsetPanel(tabPanel("Personality",
+  tabsetPanel(tabPanel("Overview",
+      strong("Welcome!", style = "color:red"),
+      p("This data set is a collection of observations of horses in turnout at St. Lawrence Universities riding facility.", style = "color:brown"), 
+      p("Enjoy navigating these tabs in the top left to compare horse performance in turnout in various conditions.", style = "color:brown"), 
+      p("Horses were each assigned personality types and plots can be adjusted to only show the type or types you are interested in.", style = "color:brown"), 
+      p("Select inputs from the selections on the left side of the screen and watch the plots change!", style = "color:brown"),
+      p("Finally, scroll down on the pages to make sure you are not missing any additional content.", style = "color:brown"), 
+      strong("Enjoy exploring!", style = "color:red")),
+  tabPanel("Personality",
     fluidRow(
       column(2,
           selectizeInput("Personality", label = "Choose a Personality Type", 
@@ -404,13 +355,12 @@ ggplot(data = personality_df(), aes(x = .data[[input$varchoice]], y = Totalnegat
   output$table1 <- renderTable({
     meanpersonality() %>% rename("Mean Negative Score" = "meannegative", "Number Observations" = "count")
   })
+  
   output$scatterplot <- renderPlot({ 
-    
-  ggplot(horse_df(), aes(x=minutes_spent_pacing,y=Totalnegativesigns)) + 
+  ggplot(horse_df(), aes(x=Start_time,y=minutes_spent_pacing)) + 
   geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
-  labs(title = "Minutes Spent Pacing vs. Total Negative Signs", y = "Minutes Spent Pacing", x = "Time of Day")
-    
-  })
+  labs(title = "Minutes Spent Pacing vs. Time of Day", y = "Minutes Spent Pacing", x = "Time of Day")
+})
 }
 shinyApp(ui, server)
 ```
