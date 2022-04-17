@@ -95,44 +95,6 @@ turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes",
   mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
  arrange(Totalnegativesigns) 
 
-# none of the things below worked to fix the times, I am deep in the world of stack exchange and very stuck. Thanks for the help!
-
-#library(lubridate)
-## testing this out
-
-#make_datetime(hour = 7, min = 30)
-
-#turnout_data %>% mutate(Start_time = Start_time + if_else(`A.M./P.M.` == "p.m.",12,0))
-
-#start_test_df <- turnout_data %>%
-#  separate(Start_time, into = c("new_hour", "new_minute", sep = ":"))
-
-#%>%
-#  mutate(new_hour = as.numeric(new_hour),
-#         new_minute = as.numeric(new_minute)) %>%
-#  mutate(new_minute = if_else(is.na(new_minute),
-#                              true = 0, false = new_minute)) %>%
-#  mutate(time = make_datetime(hour = new_hour, min = new_minute))
-
-
-
-#ggplot(data = start_test_df, aes(x = time, y = Age)) + 
- # geom_point()
-
-
-
-## next steps:
-## use stringr function to pull out a.m. or p.m. from the 
-## end time
-## googling something like "keep only text in a variable in r"
-## or "get rid of numbers in a string in r" 
-## might also help
-## 
-## use if_else to say that if it's p.m., add 12 hours to the time.
-
-
-
-
 ```
 
 - I changed the original read in data so that there is an am/pm column instead of seperating it from time so that is there now. 
@@ -314,6 +276,7 @@ ui <- fluidPage(
       p("Horses were each assigned personality types and plots can be adjusted to only show the type or types you are interested in.", style = "color:brown"), 
       p("Select inputs from the selections on the left side of the screen and watch the plots change!", style = "color:brown"),
       p("Finally, scroll down on the pages to make sure you are not missing any additional content.", style = "color:brown"), 
+      uiOutput("tab"),
       strong("Enjoy exploring!", style = "color:red")),
   tabPanel("Personality",
     fluidRow(
@@ -330,7 +293,8 @@ ui <- fluidPage(
           selectizeInput("Horse",
                    label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), 
                    selected = "Juno", multiple = TRUE),
-            plotOutput("scatterplot", height = 600)),
+            plotOutput("scatterplot", height = 600),
+          tableOutput("table2")),
       )
     )
   )
@@ -342,10 +306,18 @@ server <- function(input, output, session) {
      })
    horse_df <- reactive({turnout_data %>% filter(Horse %in% input$Horse)
      })
+   horse_df2 <- reactive({turnout_data %>% filter(Horse %in% input$Horse) %>% group_by(Horse) %>% summarise(Age = mean(Age, na.rm = TRUE))
+     })
+   url <- a("A static write-Up of this project can be found here", href="https://github.com/cdmugn/SYE_spring2022")
    
-  output$boxplot1 <- renderPlot({
+  output$tab <- renderUI({
+      tagList(url)
+    })
+   
+   output$boxplot1 <- renderPlot({
     
 ggplot(data = personality_df(), aes(x = .data[[input$varchoice]], y = Totalnegativesigns)) +
+  facet_wrap("Personality") +
   geom_boxplot(color = "firebrick2", fill = "darkred") +
   theme_stata() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
@@ -361,6 +333,9 @@ ggplot(data = personality_df(), aes(x = .data[[input$varchoice]], y = Totalnegat
   geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
   labs(title = "Minutes Spent Pacing vs. Time of Day", y = "Minutes Spent Pacing", x = "Time of Day")
 })
+  output$table2 <- renderTable({
+    horse_df2()
+  })
 }
 shinyApp(ui, server)
 ```
