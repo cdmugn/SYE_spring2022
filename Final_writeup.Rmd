@@ -197,7 +197,7 @@ ggplot(turnout_data, aes(x=Start_time,y=minutes_spent_pacing)) +
   labs(title = "Minutes Spent Pacing vs. Time of Day", y = "Minutes Spent Pacing", x = "Time of Day")
 
 ```
-There are a lot of different slopes showing herefor the different horses, mainly due to the fact that there are only three observations per horse.
+There are a lot of different slopes showing here for the different horses, mainly due to the fact that there are only three observations per horse.
 
 ### Comparing different Slopes in Scatterplots
 
