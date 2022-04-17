@@ -1,1 +1,1 @@
-# Test
+This project explores horse turnout at St.Lawrence University. It contains a final write-up html as well as the final data set contained in an excel sheet. Other files are steps in the process and may be incomplete. 

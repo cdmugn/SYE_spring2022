@@ -97,15 +97,12 @@ turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes",
 
 ```
 
-- I changed the original read in data so that there is an am/pm column instead of seperating it from time so that is there now. 
-- trying to use if_else to make r add 12 when it is pm but I am not having a lot of success.
-
 
 
 
 ### Tables
 
-Using total negative signs instead of Overall because that is not as biased towards horses with turnout where there are grass.
+The variable of "Total Negative Signs" will be used instead of "overall" turnout score because it has less bias towards horses in turnout areas with grass. 
 
 ```{r, echo=FALSE}
 negativehorse <- turnout_data %>% group_by(Horse) %>% summarise(meannegative = mean(Totalnegativesigns)) %>% arrange(meannegative)
@@ -124,7 +121,7 @@ kable(negativepersonality, digits = 2, caption = "Average Number of Negative Sig
 ```
 
 
-### Single Variable Boxplots
+### Boxplots
 
 
 ```{r, echo = FALSE}
@@ -135,7 +132,7 @@ ggplot(data = turnout_data %>% mutate(Personality= fct_reorder(Personality, Tota
   labs(title = "Horse Personality Types vs. Total Negative Signs", y = "Total Negative Signs", x = "Personality Type")
 ```
 
-Interesting things happening but have to watch how many observations per group
+Interesting things happening here but the small number of observations per group must be noted.
 
 
 ```{r, echo=FALSE}
@@ -153,7 +150,7 @@ ggplot(data = turnout_data %>% mutate(Flymask = fct_reorder(Flymask, Totalnegati
   labs(title = "Flymask vs. Total Negative Signs", y = "Total Negative Signs", x = "Flymask")
 ```
 
-This is interesting but the biggest takeaway from this plot is that there are two outliers in the "no flymask category"
+This is showing a difference with the biggest takeaway from this plot being that there are two outliers in the "no flymask" category.
 
 ```{r, echo=FALSE}
 ggplot(data = turnout_data %>% mutate(Flysheet = fct_reorder(Flysheet, desc(Totalnegativesigns))), mapping = aes(x = Flysheet, y = Totalnegativesigns)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
@@ -162,7 +159,7 @@ ggplot(data = turnout_data %>% mutate(Flysheet = fct_reorder(Flysheet, desc(Tota
   labs(title = "Flysheet vs. Total Negative Signs", y = "Total Negative Signs", x = "Flysheet")
 ```
 
-There is not a large difference here, again the outliers are the most significant things in this plot. 
+There is not a large difference here, with very similar medians for each group. Again, the outliers are the most significant things in this plot. It can be noted that there is more variation in the no flymask category than in the flymask category.
 
 ```{r, echo=FALSE}
 ggplot(data = turnout_data %>% mutate(Type_of_turnout = fct_reorder(Type_of_turnout, Totalnegativesigns)), mapping = aes(x = Type_of_turnout, y = Totalnegativesigns)) +  geom_boxplot(color = "firebrick2", fill = "darkred") +
@@ -171,10 +168,10 @@ ggplot(data = turnout_data %>% mutate(Type_of_turnout = fct_reorder(Type_of_turn
   labs(title = "Type of Turnout vs. Total Negative Signs", y = "Total Negative Signs", x = "Type of Turnout")
 ```
 
-It looks like certain fields have more success but it also needs to be considered which horses go in those fields. For example, the medical paddocks and the roundpens are the closest ones to the barn and hold the least relaxed horses. Those fields also have two of the highest negative scores. However, if horses were randomly assigned to fields that would probably not be the case.
+It looks like certain fields have more success but it also needs to be considered which horses go in those fields. For example, the medical paddocks and the roundpens are the closest in proximity to the barn and hold the least relaxed horses. Those fields also have two of the highest negative scores. However, if horses were randomly assigned to fields that would probably not be the case.
 
 
-### Single Variable Scatterplots
+### Scatterplots
 
 In this section, each point is representing a single observation period. So there are 3-4 points per horse, and 59 points total on each graph.
 
@@ -200,7 +197,7 @@ ggplot(turnout_data, aes(x=Start_time,y=minutes_spent_pacing)) +
   labs(title = "Minutes Spent Pacing vs. Time of Day", y = "Minutes Spent Pacing", x = "Time of Day")
 
 ```
-
+There are a lot of different slopes showing herefor the different horses, mainly due to the fact that there are only three observations per horse.
 
 ### Comparing different Slopes in Scatterplots
 
