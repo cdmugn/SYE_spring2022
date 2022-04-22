@@ -1,0 +1,119 @@
+---
+title: "Equine Turnout at St. Lawrence University"
+author: "Clara Mugnai"
+date: "SYE 2021/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+```{r, echo = FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+library(dplyr)
+library(ggthemes)
+library(pander)
+
+turnout_data <- read_excel("SYE data sheet.xlsx",
+                           col_types = c(
+                           ))
+
+turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes","No")) %>% 
+  mutate(Flysheet = if_else(Flysheet == "x", "Yes", "No")) %>%
+  mutate(Group = if_else(Group == "x", "Yes", "No")) %>%
+  replace(is.na(.), "No") %>%  
+  mutate(Horse = fct_reorder(Horse, Totalnegativesigns)) %>%
+  arrange(Totalnegativesigns) 
+
+
+negativepersonality <- turnout_data %>% group_by(Personality) %>% summarise(meannegative = mean(Totalnegativesigns), count = n()) %>% arrange(meannegative)
+
+library(shiny)
+
+var_choice <- names(turnout_data)[7:10]
+
+ui <- fluidPage(
+  titlePanel("Horse Turnout Preferences at St. Lawrence University"),
+  tabsetPanel(tabPanel("Overview",
+                       strong("Welcome!", style = "color:red"),
+         h4("This data set is a collection of observations of horses in turnout at St. Lawrence Universities riding facility.", style = "color:darkbrown"), 
+         br(),
+         h4("Enjoy navigating these tabs in the top left to compare horse performance in turnout in various conditions.", style = "color:darkbrown"), 
+      br(),
+      h4("Horses were each assigned personality types and plots can be adjusted to only show the type or types you are interested in.", style = "color:darkbrown"), 
+      br(),
+      h4("Select inputs from the selections on the left side of the screen and watch the plots change!", style = "color:darkbrown"),
+      br(),
+      h4("Finally, scroll down on the pages to make sure you are not missing any additional content.", style = "color:darkbrown"),
+      br(),
+              uiOutput("tab"),
+      br(),
+                       strong("Enjoy exploring!", style = "color:red")),
+              tabPanel("Personality",
+                       fluidRow(
+                         column(2,
+                                selectizeInput("Personality", label = "Choose a Personality Type", 
+                                               choices = levels(factor(turnout_data$Personality)), 
+                                               selected = "Aloof - Passive", multiple = TRUE)),
+                         radioButtons("varchoice", label = "Choose a Statistic",
+                                      choices = var_choice)),
+                       column(8, plotOutput("boxplot1", height = 600)),
+                       column(4, tableOutput("table1"))),
+              tabPanel("Horse",
+                       verticalLayout(
+                         selectizeInput("Horse",
+                                        label = "Choose a Horse", choices = levels(factor(turnout_data$Horse)), 
+                                        selected = "Juno", multiple = TRUE),
+                         plotOutput("scatterplot", height = 600),
+                         tableOutput("table2")),
+              )
+  )
+)
+server <- function(input, output, session) {
+  
+  personality_df <- reactive({turnout_data %>% filter(Personality %in% input$Personality)
+  })
+  meanpersonality <- reactive({negativepersonality %>% filter(Personality %in% input$Personality)
+  })
+  horse_df <- reactive({turnout_data %>% filter(Horse %in% input$Horse)
+  })
+  horse_df2 <- reactive({turnout_data %>% filter(Horse %in% input$Horse) %>% group_by(Horse) %>% summarise(Age = mean(Age, na.rm = TRUE))
+  })
+  url <- a("A static write-Up of this project can be found here", href="https://github.com/cdmugn/SYE_spring2022")
+  
+  output$tab <- renderUI({
+    tagList(url)
+  })
+  
+  output$boxplot1 <- renderPlot({
+    
+    ggplot(data = personality_df(), aes(x = .data[[input$varchoice]], y = Totalnegativesigns)) +
+      facet_wrap("Personality") +
+      geom_boxplot(color = "firebrick2", fill = "darkred") +
+      theme_stata() +
+      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+      labs(y = "Total Negative Signs")
+  })
+  
+  output$table1 <- renderTable({
+    meanpersonality() %>% rename("Mean Negative Score" = "meannegative", "Number Observations" = "count")
+  })
+  
+  output$scatterplot <- renderPlot({ 
+    ggplot(horse_df(), aes(x=Start_time,y=minutes_spent_pacing)) + 
+      geom_point(color = "firebrick2") + geom_smooth(se = FALSE, color = "darkred", method = lm) + facet_wrap("Horse") +  theme_stata() + theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, color = "white"), plot.title = element_text(color = "white"), plot.background = element_rect(fill = "tan4"), axis.text.y = element_text(color = "white"), axis.title = element_text(color = "white")) + 
+      labs(title = "Minutes Spent Pacing vs. Time of Day", y = "Minutes Spent Pacing", x = "Time of Day")
+  })
+  output$table2 <- renderTable({
+    horse_df2()
+  })
+}
+shinyApp(ui, server, options = list(height = 1080))
+
+
+```
+
