@@ -5,9 +5,9 @@ account: cdmugn18
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6146290
-bundleId: 5824363
+bundleId: 5824443
 url: https://cdmugn18.shinyapps.io/sye_shiny/
-when: 1650588546.34388
-lastSyncTime: 1650588546.34389
+when: 1650591868.3299
+lastSyncTime: 1650591868.32991
 asMultiple: FALSE
 asStatic: FALSE

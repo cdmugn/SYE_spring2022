@@ -32,6 +32,10 @@ turnout_data <- turnout_data %>% mutate(Flymask = if_else(Flymask == "x", "Yes",
 
 negativepersonality <- turnout_data %>% group_by(Personality) %>% summarise(meannegative = mean(Totalnegativesigns), count = n()) %>% arrange(meannegative)
 
+simple_df <- turnout_data %>% group_by(Horse,Personality) %>% slice(1)
+
+
+
 library(shiny)
 
 var_choice <- names(turnout_data)[7:10]
@@ -40,19 +44,23 @@ ui <- fluidPage(
   titlePanel("Horse Turnout Preferences at St. Lawrence University"),
   tabsetPanel(tabPanel("Overview",
                        strong("Welcome!", style = "color:red"),
-         h4("This data set is a collection of observations of horses in turnout at St. Lawrence Universities riding facility.", style = "color:darkbrown"), 
+         h5("This data set is a collection of observations of horses in turnout at St. Lawrence Universities riding facility.", style = "color:darkbrown"), 
          br(),
-         h4("Enjoy navigating these tabs in the top left to compare horse performance in turnout in various conditions.", style = "color:darkbrown"), 
+         h5("Enjoy navigating these tabs in the top left to compare horse performance in turnout in various conditions.", style = "color:darkbrown"), 
       br(),
-      h4("Horses were each assigned personality types and plots can be adjusted to only show the type or types you are interested in.", style = "color:darkbrown"), 
+      h5("Horses were each assigned personality types and plots can be adjusted to only show the type or types you are interested in.", style = "color:darkbrown"), 
       br(),
-      h4("Select inputs from the selections on the left side of the screen and watch the plots change!", style = "color:darkbrown"),
+      h5("Select inputs from the selections on the left side of the screen and watch the plots change!", style = "color:darkbrown"),
       br(),
-      h4("Finally, scroll down on the pages to make sure you are not missing any additional content.", style = "color:darkbrown"),
+      h5("Finally, scroll down on the pages to make sure you are not missing any additional content.", style = "color:darkbrown"),
       br(),
               uiOutput("tab"),
       br(),
-                       strong("Enjoy exploring!", style = "color:red")),
+                       strong("Enjoy exploring!", style = "color:red"),
+      br(),
+      h4("Below is an overview of the horses used for the study:"),
+      br(),
+      tableOutput("overview")),
               tabPanel("Personality",
                        fluidRow(
                          column(2,
@@ -88,6 +96,10 @@ server <- function(input, output, session) {
   output$tab <- renderUI({
     tagList(url)
   })
+  
+  output$overview <- renderTable( 
+    simple_df %>% select(1,4,5)
+    )
   
   output$boxplot1 <- renderPlot({
     
